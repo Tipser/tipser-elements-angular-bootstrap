@@ -1,15 +1,88 @@
-<div data-tipser-modular-product-id="5911c26c8aa0ce3d70cd607b">
-  <div class="main-container">
-    <div class="image-container">
-      <div data-tipser-modular-product-image></div>
-    </div>
-    <div class="info-container">
-      <div class="title-container">
-        <div data-tipser-modular-product-title></div>
-      </div>
-      <div class="price-container">
-        <div data-tipser-modular-product-price></div>
-      </div>
-    </div>
+<div>
+  <div data-tipser-pid="5fbf6b723c510a0001da5d86"></div>
+<!--  <div data-tipser-pid="5fbf6b613c510a0001d984fa"></div>-->
+  <div
+    data-tipser-modular-checkout
+    class="checkout-page u-p-a-s-lg">
+    <h1 class="t-large-title t-normal u-m-b-s-xl">Checkout</h1>
+    <ng-container *ngTemplateOutlet="multiStepCheckout"></ng-container>
+    <ng-template #multiStepCheckout>
+      <ul class="checkout-page__steps u-full-width u-flex u-m-b-s-lg">
+        <li
+          class="checkout-page__step t-subhead t-bold u-flex u-align-center"
+          [class.checkout-page__step--active]="currentStep === 'order'"
+          (click)="setStep('order')">
+          My Order
+        </li>
+        <li
+          class="checkout-page__step t-subhead t-bold u-flex u-align-center"
+          [class.checkout-page__step--active]="currentStep === 'details'"
+          (click)="setStep('details')">
+          Delivery
+        </li>
+        <li
+          class="checkout-page__step t-subhead t-bold u-flex u-align-center"
+          [class.checkout-page__step--active]="currentStep === 'payment'"
+          [class.checkout-page__step--unavailable]="!didFillDetails"
+          (click)="setStep('payment')">
+          Payment
+        </li>
+        <li
+          class="checkout-page__step t-subhead t-bold u-flex u-align-center"
+          [class.checkout-page__step--active]="currentStep === 'summary'"
+          [class.checkout-page__step--unavailable]="!didFillDetails || !didFillPaymentDetails"
+          (click)="setStep('summary')">
+          Summary
+        </li>
+      </ul>
+      <!-- Checkout steps -->
+      <section [class.u-none]="currentStep !== 'order'">
+        <div data-tipser-modular-checkout-cart-products></div>
+        <div class="u-flex-column-end u-m-t-s-md">
+          <button
+            class="btn-s-sm checkout-page__step-next"
+            type="button"
+            (click)="setStep('details')">
+            Continue to Details
+          </button>
+        </div>
+      </section>
+      <section [class.u-none]="currentStep !== 'details'">
+        <div data-tipser-modular-checkout-customer-address-delivery></div>
+        <div class="u-flex-column-end">
+          <button
+            type="button"
+            class="btn-s-sm checkout-page__step-next"
+            [disabled]="!didFillDetails"
+            (click)="setStep('payment')">
+            Continue to Payment
+          </button>
+        </div>
+      </section>
+      <section [class.u-none]="currentStep !== 'payment'">
+        <div data-tipser-modular-checkout-payment></div>
+        <div class="u-flex-column-end">
+          <button
+            type="button"
+            class="btn-s-sm checkout-page__step-next"
+            [disabled]="!didFillPaymentDetails"
+            (click)="setStep('summary')">
+            Summary
+          </button>
+        </div>
+      </section>
+      <section [class.u-none]="currentStep !== 'summary'">
+        <div data-tipser-modular-checkout-cart-summary></div>
+        <div class="u-flex-column-end u-m-t-s-sm">
+          <button
+            type="button"
+            class="btn-s-sm checkout-page__step-next"
+            [disabled]="!didFillPaymentDetails"
+            (click)="purchase()">
+            Purchase
+          </button>
+        </div>
+      </section>
+    </ng-template>
   </div>
 </div>
